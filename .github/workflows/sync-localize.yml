@@ -1,3 +1,4 @@
+# Trigger upstream mirror once; game files themselves are not modified here except copying from upstream.
 name: Sync upstream for localization
 
 on:
