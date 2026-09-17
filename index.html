@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>바퀴벌레</title>
+<title>蟑螂</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#efe8dc;touch-action:none;-webkit-user-select:none;user-select:none}
@@ -26,10 +26,10 @@ iframe{display:block;width:100%;height:100%;border:0;background:#efe8dc}
 </style>
 </head>
 <body>
-<iframe id="gameFrame" title="바퀴 게임" allow="autoplay"></iframe>
+<iframe id="gameFrame" title="蟑螂游戏" allow="autoplay"></iframe>
 <div id="labLayer" aria-hidden="true">
-  <iframe id="labFrame" title="잡은 바퀴벌레" allow="autoplay"></iframe>
-  <button id="labBack" type="button" aria-label="게임으로 돌아가기">돌아가기</button>
+  <iframe id="labFrame" title="捕获的蟑螂" allow="autoplay"></iframe>
+  <button id="labBack" type="button" aria-label="返回游戏">返回</button>
 </div>
 
 <!-- ───────── 인트로 · 바퀴벌레에게서 온 편지 ───────── -->
@@ -84,20 +84,20 @@ iframe{display:block;width:100%;height:100%;border:0;background:#efe8dc}
 
 <div id="intro" hidden>
   <div class="box">
-    <div class="tag">인지행동치료 프로그램</div>
-    <p>본 시뮬레이션은 <b>바퀴벌레에 대한 공포</b>로<br>일상에 어려움을 겪는 분들을 위해<br>제작되었습니다.</p>
-    <p>바퀴벌레를 보고도<br>잡지 못했던 경험이 있으신가요?</p>
-    <p>반복적인 노출과 직접적인 대처 경험은<br>공포를 줄이는 데 도움이 됩니다.</p>
-    <p>지금부터 안전한 환경에서<br>바퀴벌레와 마주하는 연습을 시작합니다.</p>
-    <button id="introGo" type="button">시작하기</button>
+    <div class="tag">认知行为治疗程序</div>
+    <p>本模拟程序专为 <b>因害怕蟑螂</b>而<br>日常生活受到影响的人<br>制作。</p>
+    <p>看到蟑螂时<br>是否曾经不敢下手抓它？</p>
+    <p>反复接触并亲自应对<br>有助于减轻恐惧。</p>
+    <p>现在开始，在安全的环境中<br>练习面对蟑螂。</p>
+    <button id="introGo" type="button">开始</button>
   </div>
 </div>
 
 <div id="mail" aria-hidden="true">
   <div class="env"></div>
-  <div class="card" role="dialog" aria-label="바퀴벌레에게서 온 편지">
+  <div class="card" role="dialog" aria-label="蟑螂来信">
     <div class="top">
-      <div class="ttl">바퀴벌레에게서 온 편지</div>
+      <div class="ttl">蟑螂来信</div>
       <div class="stamp"><svg viewBox="0 0 62 78" aria-hidden="true">
         <defs>
           <mask id="mailPerf"><rect width="62" height="78" fill="#fff"/><g fill="#000" id="mailPerfDots"></g></mask>
@@ -129,13 +129,13 @@ iframe{display:block;width:100%;height:100%;border:0;background:#efe8dc}
       </svg></div>
     </div>
     <div class="body" id="mailBody"></div>
-    <div class="from">바퀴벌레가</div>
-    <div class="fact" id="mailFact" hidden><span class="fact-tag">짤막 상식!</span><span id="mailFactText"></span></div>
-    <button id="mailOk" type="button">확인</button>
+    <div class="from">蟑螂</div>
+    <div class="fact" id="mailFact" hidden><span class="fact-tag">小知识！</span><span id="mailFactText"></span></div>
+    <button id="mailOk" type="button">确定</button>
   </div>
 </div>
 
-<a id="arcadeFace" data-pos="tl" href="https://aaffffffffff123-lang.github.io/arcade/" target="_top" aria-label="혐규오락실 — 다른 게임 하러 가기" title="혐규오락실">
+<a id="arcadeFace" data-pos="tl" href="https://aaffffffffff123-lang.github.io/arcade/" target="_top" aria-label="嫌规游戏厅 — 去玩其他游戏" title="嫌规游戏厅">
   <svg viewBox="0 0 48 48" aria-hidden="true">
     <path d="M24.00 2.84 C27.19 2.93 30.48 3.49 33.44 4.70 C36.39 5.91 39.79 7.65 41.72 10.08 C43.64 12.51 44.41 16.18 44.97 19.28 C45.53 22.39 45.73 25.72 45.08 28.74 C44.42 31.76 43.07 35.11 41.06 37.40 C39.05 39.69 35.87 41.15 33.03 42.47 C30.19 43.79 27.09 45.14 24.00 45.31 C20.91 45.47 17.40 44.72 14.49 43.46 C11.58 42.19 8.30 40.21 6.54 37.72 C4.78 35.22 4.45 31.57 3.93 28.51 C3.41 25.45 2.76 22.23 3.42 19.37 C4.08 16.52 6.10 13.90 7.91 11.36 C9.72 8.82 11.61 5.56 14.29 4.14 C16.97 2.72 20.81 2.75 24.00 2.84 Z" fill="#221D1F"/>
     <g stroke="#EFF1EC" stroke-width="2.2" stroke-linecap="round" fill="none">
@@ -213,7 +213,7 @@ async function waitForGame(){
     await delay(20);
   }
   boot.classList.add('done');
-  showError('게임 연결에 실패했습니다. game.html과 index.html이 같은 폴더에 있는지 확인해 주세요.');
+  showError('游戏连接失败。请确认 game.html 和 index.html 位于同一文件夹。');
 }
 
 gameFrame.addEventListener('load',()=>{
@@ -224,18 +224,18 @@ gameFrame.addEventListener('load',()=>{
 
 // ───────── 인트로 · 바퀴벌레에게서 온 편지 ─────────
 const LETTER={
-  feed:{color:'#8fd1b8',lines:['바퀴벌레의 삶을','내 자식들에게도 물려줘야지']},
-  death:{color:'#f5a8b8',lines:['하지만,','사랑이 이긴다']},
-  lab:{color:'#9cc8f0',lines:['우리를 더 잘 알게 되면,','더 이상 무섭지 않을걸요?'],facts:[
-    '바퀴벌레는 머리가 없어도\n일주일을 살 수 있어요.',
-    '머리 없는 바퀴벌레가 결국 죽는 건\n물을 못 마셔서예요.',
-    '바퀴벌레는 먹이 없이도\n한 달쯤 버틸 수 있어요.',
-    '바퀴벌레는 1초에\n자기 몸길이의 50배를 달려요.',
-    '바퀴벌레는 동전 두께 틈에도\n몸을 납작하게 눌러 들어가요.',
-    '바퀴벌레는 숨을 40분 동안\n참을 수 있어요.',
-    '알집 하나에는 알이\n30~40개 들어 있어요.',
-    '바퀴벌레의 피는 빨갛지 않아요.\n거의 투명해요.',
-    '바퀴벌레의 조상은 3억 년 전\n화석에서도 발견돼요.',
+  feed:{color:'#8fd1b8',lines:['蟑螂的生活方式','也要传给我的孩子们']},
+  death:{color:'#f5a8b8',lines:['但是，','爱终将获胜']},
+  lab:{color:'#9cc8f0',lines:['如果你更了解我们，','就不会再那么害怕了吧？'],facts:[
+    '蟑螂即使没有头\n也能活一周。',
+    '无头蟑螂最终死亡\n是因为无法喝水。',
+    '蟑螂即使没有食物\n也能撑大约一个月。',
+    '蟑螂1秒内能跑过\n相当于自身长度50倍的距离。',
+    '蟑螂能把身体压扁\n钻进硬币厚度的缝隙。',
+    '蟑螂可以屏住呼吸\n长达40分钟。',
+    '一个卵鞘里有\n30～40枚卵。',
+    '蟑螂的血不是红色的，\n几乎是透明的。',
+    '蟑螂的祖先早在3亿年前\n的化石中就已出现。',
   ]},
 };
 const LETTER_GAP=40;                    // 편지끼리 최소 간격(초)
@@ -519,7 +519,7 @@ function selectTweezer(){
   if(!G||G.state!=='r1')return;
   G.r1.cancel?.();
   G.r1.selectItem('tweezer');
-  G.ui.hint?.('살아 있는 바퀴벌레 한 마리를 누르면 집어 올립니다.',2.2,0,true);
+  G.ui.hint?.('点击一只活蟑螂即可将它夹起。',2.2,0,true);
   preloadLab();
   if(lastPointer)pointTweezerAt(lastPointer.x,lastPointer.y,lastPointer.type==='mouse');
 }
@@ -559,7 +559,7 @@ function missSnap(sx,sy){
     tweezerRig.userData.setGrip(0);
     if(!(lastPointer&&lastPointer.type==='mouse'))tweezerRig.visible=false;
   },140);
-  G.ui.hint?.('바퀴벌레 몸통을 정확히 눌러 주세요.',1.35,0,true);
+  G.ui.hint?.('请准确点击蟑螂的躯干。',1.35,0,true);
 }
 
 function captureAt(sx,sy,pointerType){
@@ -655,8 +655,8 @@ function addTweezerSlot(){
   const slot=doc.createElement('div');
   slot.id='tweezer-slot';
   slot.className='slot';
-  slot.textContent='족집게';
-  slot.title='족집게 (T)';
+  slot.textContent='镊子';
+  slot.title='镊子 (T)';
   slot.addEventListener('pointerdown',e=>{
     e.stopPropagation();
     e.preventDefault();
@@ -823,7 +823,7 @@ function closeLab(){
     G.sleep=false;
     G.paused=pausedBeforeLab;
     G.r1.touch?.();
-    G.ui.hint?.('족집게로 다른 바퀴벌레도 집을 수 있습니다.',1.6,.1,true);
+    G.ui.hint?.('还可以用镊子夹起其他蟑螂。',1.6,.1,true);
   }
   setTimeout(()=>{closeBusy=false;},160);
 }
