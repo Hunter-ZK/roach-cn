@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+<meta name="theme-color" content="#e9dfc8" />
+<title>蟑螂：面对与逃生</title>
+<style>
+:root{--paper:#f4ecd9;--paper2:#e9dfc8;--ink:#342417;--muted:#755d45;--edge:#bea77f;--green:#2f7f68;--red:#a94438;--shadow:0 10px 34px rgba(56,35,20,.18)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--paper2);color:var(--ink);font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;user-select:none;touch-action:none}
+button{font:inherit;color:inherit}.screen{position:fixed;inset:0}.hidden{display:none!important}
+#intro{display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 28%,#fff 0,#eef4ee 52%,#d9e6df 100%);z-index:50}
+.card{width:min(92vw,560px);padding:34px 28px;border-radius:28px;background:rgba(255,255,255,.86);box-shadow:var(--shadow);backdrop-filter:blur(10px);text-align:center}
+.badge{display:inline-block;padding:7px 14px;border-radius:999px;background:var(--green);color:#fff;font-size:13px;font-weight:800;letter-spacing:.08em}.card h1{font-size:clamp(30px,8vw,48px);margin:18px 0 14px}.card p{font-size:16px;line-height:1.9;color:#36564c;margin:0 0 24px}.primary{width:100%;height:56px;border:0;border-radius:16px;background:var(--green);color:white;font-size:18px;font-weight:800;box-shadow:0 4px 0 #205947}.primary:active{transform:translateY(3px);box-shadow:0 1px 0 #205947}
+#game{background:linear-gradient(135deg,#d7c8a4,#bca37b)}canvas{display:block;width:100%;height:100%}
+#hud{position:fixed;inset:0;pointer-events:none}.hudBox{position:absolute;top:14px;left:14px;padding:10px 14px;border-radius:14px;background:rgba(247,239,219,.9);box-shadow:0 3px 12px rgba(0,0,0,.12);font-weight:800}.phase{font-size:12px;color:var(--muted);font-weight:700}.big{font-size:28px;line-height:1.05}.goal{font-size:12px;color:var(--muted);margin-top:3px}
+#tools{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:grid;gap:9px;pointer-events:auto}.tool{min-width:74px;height:42px;border:0;border-radius:13px;background:rgba(247,239,219,.96);box-shadow:0 3px 0 #aa8f65;font-weight:800}.tool.active{background:var(--ink);color:var(--paper);box-shadow:0 3px 0 #111}.tool small{display:block;font-size:10px;opacity:.65;font-weight:600}
+#quit{position:absolute;top:14px;right:14px;padding:12px 16px;border:0;border-radius:999px;background:rgba(247,239,219,.95);box-shadow:0 3px 0 #aa8f65;pointer-events:auto;font-weight:800}.tip{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);max-width:80vw;padding:10px 15px;border-radius:999px;background:rgba(31,23,15,.74);color:#fff;font-size:13px;text-align:center}
+#transition,#ending{display:grid;place-items:center;padding:22px;background:#111;color:#f4ecd9;z-index:60;text-align:center}.transitionBox{max-width:560px}.transitionBox .eyebrow{font-size:13px;letter-spacing:.18em;opacity:.6}.transitionBox h2{font-size:clamp(30px,8vw,52px);margin:12px 0}.transitionBox p{line-height:1.9;opacity:.8}.lightBtn{margin-top:18px;padding:14px 24px;border:1px solid rgba(244,236,217,.4);border-radius:999px;background:transparent;color:#f4ecd9;font-weight:800}
+#r2hud{position:fixed;inset:0;pointer-events:none}.status{position:absolute;left:14px;top:14px;padding:10px 14px;border-radius:14px;background:rgba(25,18,12,.75);color:#f5ead0}.status b{font-size:22px}.r2buttons{position:absolute;right:18px;bottom:22px;display:grid;gap:12px;pointer-events:auto}.roundBtn{width:78px;height:78px;border-radius:50%;border:0;background:#f4ecd9;box-shadow:0 5px 0 #a88b5d,0 10px 24px rgba(0,0,0,.25);font-weight:900}.roundBtn:active{transform:translateY(3px)}#joystick{position:absolute;left:22px;bottom:24px;width:124px;height:124px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);pointer-events:auto}#knob{position:absolute;width:54px;height:54px;border-radius:50%;background:#f4ecd9;left:35px;top:35px;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+#lab{z-index:70;background:#efe8d8;padding:20px;overflow:auto}.labWrap{max-width:920px;margin:auto}.labTop{display:flex;justify-content:space-between;align-items:center;gap:12px}.labTop h2{margin:0}.back{padding:10px 15px;border:0;border-radius:999px;background:#fff8e8;box-shadow:0 2px 0 #b9a27c;font-weight:800}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:20px}.spec{padding:18px;border-radius:20px;background:#fff9ea;box-shadow:var(--shadow)}.roachIcon{height:90px;display:grid;place-items:center;font-size:56px}.spec h3{margin:8px 0 4px}.spec p{font-size:13px;color:var(--muted);line-height:1.55;margin:0}.locked{filter:grayscale(1);opacity:.46}
+#topLab{position:fixed;left:14px;bottom:14px;z-index:40;padding:10px 14px;border:0;border-radius:999px;background:rgba(247,239,219,.92);box-shadow:0 3px 0 #aa8f65;font-weight:800}
+.notice{font-size:12px;opacity:.65;margin-top:16px;line-height:1.6}
+@media(max-width:620px){#tools{right:8px}.tool{min-width:62px;font-size:12px}.hudBox{max-width:145px}.tip{font-size:12px}.card{padding:28px 20px}}
+</style>
+</head>
+<body>
+<section id="intro" class="screen">
+  <div class="card">
+    <span class="badge">模拟体验 · 中文重制</span>
+    <h1>蟑螂</h1>
+    <p>你是否有过看见蟑螂，却迟迟不敢靠近的经历？<br>第一阶段，你要面对它；第二阶段，你会成为它。</p>
+    <button id="startBtn" class="primary">开始体验</button>
+    <div class="notice">本项目为基于公开可观察玩法重新实现的独立版本，不包含原项目源代码或原始美术素材。</div>
+  </div>
+</section>
+
+<section id="game" class="screen hidden">
+  <canvas id="canvas"></canvas>
+  <div id="hud">
+    <div class="hudBox"><div class="phase">第一阶段 · 面对</div><div class="big"><span id="kills">0</span> 只</div><div class="goal">击杀 25 只后可进入下一阶段</div></div>
+    <div id="tools"></div>
+    <button id="quit">进入下一阶段</button>
+    <div class="tip">点击 / 触摸蟑螂进行攻击 · 不同工具范围与冷却不同</div>
+  </div>
+  <button id="topLab">标本图鉴</button>
+</section>
+
+<section id="transition" class="screen hidden">
+  <div class="transitionBox"><div class="eyebrow">视角反转</div><h2>现在，轮到你逃了。</h2><p>你会以蟑螂的视角穿过房间。躲开人的脚步，在有限时间里存活，并尽可能留下更多卵鞘。</p><button id="goR2" class="lightBtn">成为蟑螂</button></div>
+</section>
+
+<section id="r2" class="screen hidden" style="background:linear-gradient(#4a3a29,#2c241b)">
+  <canvas id="canvas2"></canvas>
+  <div id="r2hud">
+    <div class="status"><div>剩余时间 <b id="timer">45</b>s</div><div>已产卵 <span id="eggs">0</span> · 生命 <span id="hp">3</span></div></div>
+    <div id="joystick"><div id="knob"></div></div>
+    <div class="r2buttons"><button id="eggBtn" class="roundBtn">产卵</button><button id="dashBtn" class="roundBtn">冲刺</button></div>
+    <div class="tip">左下摇杆移动 · 冲刺躲避 · 产卵会短暂停留</div>
+  </div>
+</section>
+
+<section id="ending" class="screen hidden">
+ <div class="transitionBox"><div class="eyebrow">本轮结束</div><h2 id="endTitle">你活下来了</h2><p id="endText"></p><button id="again" class="lightBtn">再来一次</button><button id="openLabEnd" class="lightBtn">查看标本图鉴</button></div>
+</section>
+
+<section id="lab" class="screen hidden"><div class="labWrap"><div class="labTop"><h2>标本图鉴</h2><button id="labBack" class="back">返回</button></div><p>你在第一阶段使用过的工具和击杀记录，会解锁对应标本卡片。</p><div id="specGrid" class="grid"></div></div></section>
+
+<script>
+const $=s=>document.querySelector(s);const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const state={kills:0,tool:0,used:new Set(),unlocked:new Set(),running:false,r2:false,eggs:0,hp:3,time:45,dash:0,eggCd:0};
+const TOOLS=[
+ {name:'手',sub:'精准',r:28,cd:240},{name:'纸巾',sub:'稳妥',r:40,cd:330},{name:'拖鞋',sub:'经典',r:55,cd:430},{name:'书本',sub:'范围',r:66,cd:580},{name:'平底锅',sub:'重击',r:80,cd:720},{name:'吸尘器',sub:'吸附',r:90,cd:780},{name:'喷雾',sub:'持续',r:105,cd:920},{name:'火焰',sub:'终极',r:125,cd:1100}
+];
+const toolBox=$('#tools');TOOLS.forEach((t,i)=>{const b=document.createElement('button');b.className='tool'+(i===0?' active':'');b.innerHTML=`${t.name}<small>${t.sub}</small>`;b.onclick=()=>{state.tool=i;[...toolBox.children].forEach((e,j)=>e.classList.toggle('active',j===i));};toolBox.appendChild(b)});
+function show(id){['#intro','#game','#transition','#r2','#ending','#lab'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
+
+const c=$('#canvas'),ctx=c.getContext('2d');let roaches=[],particles=[],lastAttack=0,W=0,H=0,last=0,spawn=0;
+function resize(){const d=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;c.style.width=W+'px';c.style.height=H+'px';ctx.setTransform(d,0,0,d,0,0);c2.width=W*d;c2.height=H*d;c2.style.width=W+'px';c2.style.height=H+'px';ctx2.setTransform(d,0,0,d,0,0)}addEventListener('resize',resize);
+function makeRoach(){const edge=Math.floor(Math.random()*4);let x,y;if(edge===0){x=Math.random()*W;y=-20}else if(edge===1){x=W+20;y=Math.random()*H}else if(edge===2){x=Math.random()*W;y=H+20}else{x=-20;y=Math.random()*H}const a=Math.atan2(H/2-y,W/2-x)+(Math.random()-.5)*1.4;return{x,y,a,s:35+Math.random()*55,size:9+Math.random()*7,wig:Math.random()*6.28}}
+function drawRoach(g,x,y,a,s){g.save();g.translate(x,y);g.rotate(a);g.fillStyle='#2a160c';g.strokeStyle='#1b0c06';g.lineWidth=1.4;for(let k=-1;k<=1;k++){g.beginPath();g.moveTo(-2,k*3);g.lineTo(-12,k*7-6);g.moveTo(2,k*3);g.lineTo(12,k*7+6);g.stroke()}g.beginPath();g.ellipse(0,0,s*.55,s,0,0,Math.PI*2);g.fill();g.fillStyle='#6b3a1c';g.beginPath();g.ellipse(0,-s*.18,s*.38,s*.65,0,0,Math.PI*2);g.fill();g.strokeStyle='#2a160c';g.beginPath();g.moveTo(-2,-s*.7);g.quadraticCurveTo(-9,-s*1.25,-15,-s*1.5);g.moveTo(2,-s*.7);g.quadraticCurveTo(9,-s*1.25,15,-s*1.5);g.stroke();g.restore()}
+function attack(x,y){const now=performance.now(),t=TOOLS[state.tool];if(now-lastAttack<t.cd)return;lastAttack=now;state.used.add(t.name);let n=0;roaches=roaches.filter(r=>{const hit=Math.hypot(r.x-x,r.y-y)<t.r+r.size;if(hit){n++;for(let i=0;i<8;i++)particles.push({x:r.x,y:r.y,vx:(Math.random()-.5)*90,vy:(Math.random()-.5)*90,l:1})}return !hit});if(n){state.kills+=n;state.unlocked.add(t.name);$('#kills').textContent=state.kills;save();}particles.push({x,y,vx:0,vy:0,l:1.2,ring:t.r});}
+c.addEventListener('pointerdown',e=>attack(e.clientX,e.clientY));
+function r1loop(ts){if(!state.running||state.r2)return;const dt=Math.min((ts-last||16)/1000,.05);last=ts;spawn-=dt;if(spawn<=0){spawn=Math.max(.17,.72-state.kills*.012);roaches.push(makeRoach())}ctx.clearRect(0,0,W,H);drawRoom(ctx);for(const r of roaches){r.wig+=dt*6;r.a+=Math.sin(r.wig)*dt*.7;r.x+=Math.cos(r.a)*r.s*dt;r.y+=Math.sin(r.a)*r.s*dt;if(r.x<-60||r.y<-60||r.x>W+60||r.y>H+60)Object.assign(r,makeRoach());drawRoach(ctx,r.x,r.y,r.a,r.size)}particles=particles.filter(p=>{p.l-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.ring){ctx.beginPath();ctx.arc(p.x,p.y,p.ring*(1.4-p.l*.3),0,Math.PI*2);ctx.strokeStyle=`rgba(255,245,220,${Math.max(0,p.l/1.2)})`;ctx.lineWidth=3;ctx.stroke()}else{ctx.fillStyle=`rgba(75,33,10,${Math.max(0,p.l)})`;ctx.fillRect(p.x,p.y,3,3)}return p.l>0});requestAnimationFrame(r1loop)}
+function drawRoom(g){g.fillStyle='#cbb48b';g.fillRect(0,0,W,H);g.fillStyle='rgba(255,255,255,.12)';for(let x=0;x<W;x+=80)g.fillRect(x,0,2,H);for(let y=0;y<H;y+=80)g.fillRect(0,y,W,2);g.fillStyle='#8a6d4e';g.fillRect(W*.08,H*.1,W*.28,H*.16);g.fillStyle='#6e5540';g.fillRect(W*.62,H*.7,W*.3,H*.18);g.fillStyle='#dfd3b5';g.fillRect(W*.58,H*.12,W*.23,H*.24)}
+function startR1(){state.running=true;state.r2=false;state.kills=0;state.used.clear();state.unlocked.clear();$('#kills').textContent='0';roaches=[];particles=[];last=0;show('#game');requestAnimationFrame(r1loop)}
+$('#startBtn').onclick=startR1;$('#quit').onclick=()=>{if(state.kills<25){$('#quit').textContent=`还差 ${25-state.kills} 只`;setTimeout(()=>$('#quit').textContent='进入下一阶段',1000);return}state.running=false;show('#transition')};$('#goR2').onclick=startR2;
+
+const c2=$('#canvas2'),ctx2=c2.getContext('2d');let player={x:0,y:0,a:0},human={x:0,y:0,vx:0,vy:0},eggMarks=[],joy={x:0,y:0,active:false},r2last=0,tickAcc=0;
+function startR2(){show('#r2');state.r2=true;state.running=true;state.eggs=0;state.hp=3;state.time=45;state.dash=0;state.eggCd=0;$('#eggs').textContent='0';$('#hp').textContent='3';$('#timer').textContent='45';player={x:W*.5,y:H*.72,a:-Math.PI/2};human={x:W*.5,y:H*.25,vx:0,vy:0};eggMarks=[];r2last=0;tickAcc=0;requestAnimationFrame(r2loop)}
+function r2loop(ts){if(!state.r2)return;const dt=Math.min((ts-r2last||16)/1000,.05);r2last=ts;tickAcc+=dt;if(tickAcc>=1){tickAcc-=1;state.time--;$('#timer').textContent=state.time;if(state.time<=0)return finishR2(true)}state.dash=Math.max(0,state.dash-dt);state.eggCd=Math.max(0,state.eggCd-dt);let speed=125*(state.dash>0?2.15:1);player.x=clamp(player.x+joy.x*speed*dt,18,W-18);player.y=clamp(player.y+joy.y*speed*dt,18,H-18);if(Math.hypot(joy.x,joy.y)>.1)player.a=Math.atan2(joy.y,joy.x)+Math.PI/2;const dx=player.x-human.x,dy=player.y-human.y,d=Math.hypot(dx,dy)||1;human.vx+=dx/d*45*dt;human.vy+=dy/d*45*dt;const hs=72;const hv=Math.hypot(human.vx,human.vy)||1;human.vx=human.vx/hv*Math.min(hv,hs);human.vy=human.vy/hv*Math.min(hv,hs);human.x+=human.vx*dt;human.y+=human.vy*dt;if(human.x<25||human.x>W-25)human.vx*=-1;if(human.y<25||human.y>H-25)human.vy*=-1;human.x=clamp(human.x,25,W-25);human.y=clamp(human.y,25,H-25);if(Math.hypot(player.x-human.x,player.y-human.y)<38&&state.dash<=0){state.hp--;$('#hp').textContent=state.hp;player.x=W*.5;player.y=H*.78;human.x=W*.5;human.y=H*.2;if(state.hp<=0)return finishR2(false)}drawR2();requestAnimationFrame(r2loop)}
+function drawR2(){ctx2.fillStyle='#34291f';ctx2.fillRect(0,0,W,H);ctx2.fillStyle='#51402f';for(let x=0;x<W;x+=72)ctx2.fillRect(x,0,2,H);for(let y=0;y<H;y+=72)ctx2.fillRect(0,y,W,2);eggMarks.forEach(e=>{ctx2.fillStyle='#c89a57';ctx2.beginPath();ctx2.ellipse(e.x,e.y,7,12,e.a,0,Math.PI*2);ctx2.fill()});ctx2.save();ctx2.translate(human.x,human.y);ctx2.fillStyle='#d9b49b';ctx2.beginPath();ctx2.arc(-16,0,21,0,Math.PI*2);ctx2.arc(16,0,21,0,Math.PI*2);ctx2.fill();ctx2.fillStyle='#5a4032';ctx2.fillRect(-38,18,30,12);ctx2.fillRect(8,18,30,12);ctx2.restore();drawRoach(ctx2,player.x,player.y,player.a,13)}
+const joyEl=$('#joystick'),knob=$('#knob');function setJoy(e){const r=joyEl.getBoundingClientRect(),x=e.clientX-(r.left+r.width/2),y=e.clientY-(r.top+r.height/2),m=Math.hypot(x,y)||1,s=Math.min(1,48/m);joy.x=x/48*s;joy.y=y/48*s;knob.style.transform=`translate(${joy.x*34}px,${joy.y*34}px)`}joyEl.addEventListener('pointerdown',e=>{joy.active=true;joyEl.setPointerCapture(e.pointerId);setJoy(e)});joyEl.addEventListener('pointermove',e=>{if(joy.active)setJoy(e)});['pointerup','pointercancel'].forEach(ev=>joyEl.addEventListener(ev,()=>{joy.active=false;joy.x=joy.y=0;knob.style.transform=''}));
+$('#dashBtn').onclick=()=>{if(state.dash<=0)state.dash=.6};$('#eggBtn').onclick=()=>{if(state.eggCd>0)return;state.eggCd=2.4;eggMarks.push({x:player.x,y:player.y,a:player.a});state.eggs++;$('#eggs').textContent=state.eggs;state.unlocked.add('卵鞘');save()};
+function finishR2(win){state.r2=false;state.running=false;show('#ending');$('#endTitle').textContent=win?'你活下来了':'你被发现了';$('#endText').textContent=`第一阶段击杀 ${state.kills} 只；第二阶段留下 ${state.eggs} 个卵鞘。${win?'你完成了从“面对”到“换位”的整轮体验。':'再试一次，利用冲刺拉开与人的距离。'}`;save();renderLab()}
+$('#again').onclick=startR1;
+
+const SPECS=[['普通成虫','最常见的室内访客。行动迅速，偏好阴暗缝隙。','手'],['快速型','靠近后会突然改变方向。','拖鞋'],['警觉型','对大范围攻击更敏感。','书本'],['重甲型','体型更大，需要更果断的处理。','平底锅'],['藏匿型','会沿家具边缘快速移动。','吸尘器'],['耐受型','持续性处理更有效。','喷雾'],['焦痕标本','仅用于图鉴中的夸张表现。','火焰'],['卵鞘','在第二阶段成功产卵后解锁。','卵鞘']];
+function renderLab(){const g=$('#specGrid');g.innerHTML='';SPECS.forEach(([n,d,k])=>{const ok=state.unlocked.has(k),el=document.createElement('article');el.className='spec'+(ok?'':' locked');el.innerHTML=`<div class="roachIcon">${ok?(k==='卵鞘'?'🥚':'🪳'):'?'}</div><h3>${ok?n:'未解锁标本'}</h3><p>${ok?d:`使用「${k}」完成相关行为后解锁。`}</p>`;g.appendChild(el)})}
+function openLab(){renderLab();show('#lab')}$('#topLab').onclick=openLab;$('#openLabEnd').onclick=openLab;$('#labBack').onclick=()=>{if(state.r2)show('#r2');else if(state.running)show('#game');else show('#ending')};
+function save(){localStorage.setItem('roach-cn-save',JSON.stringify({unlocked:[...state.unlocked]}))}try{const s=JSON.parse(localStorage.getItem('roach-cn-save')||'{}');(s.unlocked||[]).forEach(x=>state.unlocked.add(x))}catch{}
+resize();
+</script>
+</body>
+</html>
