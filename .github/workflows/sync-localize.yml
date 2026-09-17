@@ -1,0 +1,64 @@
+name: Sync upstream for localization
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sync-localize.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          path: target
+
+      - name: Checkout original repository
+        uses: actions/checkout@v4
+        with:
+          repository: aaffffffffff123-lang/roach
+          ref: main
+          path: upstream
+
+      - name: Mirror original game files and extract Korean strings
+        run: |
+          cp upstream/index.html target/index.html
+          cp upstream/game.html target/game.html
+          cp upstream/specimen-lab.html target/specimen-lab.html
+          rm -f target/README.md target/LICENSE
+          python - <<'PY'
+          import re
+          from pathlib import Path
+
+          root = Path('target')
+          files = [root/'index.html', root/'game.html', root/'specimen-lab.html']
+          seen = set()
+          out = []
+          for p in files:
+              text = p.read_text(encoding='utf-8')
+              out.append(f'### {p.name}')
+              for i, line in enumerate(text.splitlines(), 1):
+                  if re.search(r'[가-힣]', line):
+                      s = line.strip()
+                      if s not in seen:
+                          seen.add(s)
+                          out.append(f'{i}: {s}')
+              out.append('')
+          (root/'translation-source.txt').write_text('\n'.join(out), encoding='utf-8')
+          PY
+
+      - name: Commit mirrored source
+        working-directory: target
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html game.html specimen-lab.html translation-source.txt README.md LICENSE || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: mirror original game for Chinese localization"
+            git push
+          fi
